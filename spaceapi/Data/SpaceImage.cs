@@ -10,4 +10,6 @@ public class SpaceImage
 
     [JsonPropertyName("title")]
     public string? Title { get; set; }
+
+    public string? Error { get; set; }
 }

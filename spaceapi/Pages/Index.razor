@@ -7,21 +7,26 @@
 
 <h1>NASA Image of the Day</h1>
 
-@if (response == null)
+@if (image == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-    <p>@response.Title</p>
-    <img src="@response.Url" alt="@response.Title" />
+    <p>@image.Title</p>
+    <img src="@image.Url" alt="@image.Title" />
+
+    @if(image.Error != null){
+        <p>Error retrieving image from API. Status: @image.Error</p>
+        <p>Check API key!</p>
+    }
 }
 
 @code {
-    private SpaceImage? response;
+    private SpaceImage? image;
 
     protected override async Task OnInitializedAsync()
     {
-        response = await ImageService.GetImageOfTheDay();
+        image = await ImageService.GetImageOfTheDay();
     }
 }
