@@ -33,8 +33,6 @@ public class SpaceImageService
         {
             var resp = await response.Content.ReadAsStringAsync();
             img = JsonSerializer.Deserialize<SpaceImage>(resp);
-            
-
         }
 
         else {
