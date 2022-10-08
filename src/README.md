@@ -1,0 +1,1 @@
+[![Azure Static Web Apps CI/CD](https://github.com/jocuffey/spaceapi/actions/workflows/azure-static-web-apps-wonderful-forest-0cac18c03.yml/badge.svg?branch=main)](https://github.com/jocuffey/spaceapi/actions/workflows/azure-static-web-apps-wonderful-forest-0cac18c03.yml)
