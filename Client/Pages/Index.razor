@@ -1,0 +1,33 @@
+﻿@page "/"
+
+<PageTitle>Space Images</PageTitle>
+
+@using spaceapi.Data
+@inject SpaceImageService ImageService
+
+<h1>NASA Image of the Day</h1>
+
+@if (image == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <p>@image.Title</p>
+    <img src="@image.Url" alt="@image.Title" />
+
+    @if (image.Error != null)
+    {
+        <p>Error retrieving image from API. Status: @image.Error</p>
+        <p>Check API key!</p>
+    }
+}
+
+@code {
+    private SpaceImage? image;
+
+    protected override async Task OnInitializedAsync()
+    {
+        image = await ImageService.GetImageOfTheDay();
+    }
+}
