@@ -41,11 +41,17 @@ namespace GetTokenFunction
 
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            string responseMessage = response.IsSuccessStatusCode
-                ? "Request was unsuccsessful"
-                : response.Content.ToString();
+            if (response.IsSuccessStatusCode)
+            {
+                var resp = await response.Content.ReadAsStringAsync();
+                return new OkObjectResult(resp);
+            }
 
-            return new OkObjectResult(responseMessage);
+            else
+            {
+                return new BadRequestObjectResult(response);
+            }
+
         }
     }
 }
