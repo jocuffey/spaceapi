@@ -29,7 +29,7 @@ namespace spaceapi.Services
 
             try
             {
-                client.BaseAddress = new Uri(apiUrl + "GetNotionContent");
+                client.BaseAddress = new Uri(apiUrl + "/GetNotionContent");
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 response = await client.GetAsync(apiUrl).ConfigureAwait(false);
