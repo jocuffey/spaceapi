@@ -9,12 +9,10 @@ namespace spaceapi.Services
     {
         private readonly ILogger<NotionService> _logger;
         private readonly IConfiguration _configuration;
-        private readonly TokenRetrievalService _tokenRetrievalService;
 
-        public NotionService(ILogger<NotionService> logger, TokenRetrievalService tokenRetrievalService, IConfiguration configuration)
+        public NotionService(ILogger<NotionService> logger, IConfiguration configuration)
         {
             _logger = logger;
-            _tokenRetrievalService = tokenRetrievalService;
             _configuration = configuration;
         }
 
@@ -29,10 +27,10 @@ namespace spaceapi.Services
 
             try
             {
-                client.BaseAddress = new Uri(apiUrl + "/GetNotionContent");
+                client.BaseAddress = new Uri(apiUrl);
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                response = await client.GetAsync(apiUrl).ConfigureAwait(false);
+                response = await client.GetAsync("/GetNotionContent").ConfigureAwait(false);
 
             }
 
