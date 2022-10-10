@@ -1,12 +1,11 @@
-using System;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using System.Net.Http.Headers;
+using System;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace GetTokenFunction
 {
@@ -17,42 +16,27 @@ namespace GetTokenFunction
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
-            string? apiUrl = Environment.GetEnvironmentVariable("NotionApiUrl", EnvironmentVariableTarget.Process);
-            string getUsersUrl = apiUrl + "users";
+            string apiUrl = Environment.GetEnvironmentVariable("NotionApiUrl", EnvironmentVariableTarget.Process);
+            string authKey = Environment.GetEnvironmentVariable("NotionApiKey", EnvironmentVariableTarget.Process);
 
             HttpClient client = new HttpClient();
-            HttpResponseMessage response = new HttpResponseMessage();
 
-            try
+            var request = new HttpRequestMessage
             {
-                string accessKey = Environment.GetEnvironmentVariable("NotionApiKey");
-                client.BaseAddress = new Uri(apiUrl);
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessKey);
-
-                response = await client.GetAsync(getUsersUrl).ConfigureAwait(false);
-
-            }
-
-            catch (Exception ex)
+                Method = HttpMethod.Get,
+                RequestUri = new Uri($"{apiUrl}v1/users"),
+                Headers =
+                {
+                    { "Notion-Version", "2022-02-22" },
+                    { "Authorization", $"Bearer {authKey}" },
+                },
+            };
+            using (var response = await client.SendAsync(request))
             {
-                log.LogError("Error communicating with API", ex.Message);
+                response.EnsureSuccessStatusCode();
+                var body = await response.Content.ReadAsStringAsync();
+                return new OkObjectResult(body);
             }
-
-            log.LogInformation("C# HTTP trigger function processed a request.");
-            log.LogInformation(response.Content.ToString());
-
-            if (response.IsSuccessStatusCode)
-            {
-                var resp = await response.Content.ReadAsStringAsync();
-                return new OkObjectResult(resp);
-            }
-
-            else
-            {
-                return new BadRequestObjectResult(response);
-            }
-
         }
     }
 }
