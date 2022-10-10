@@ -40,6 +40,7 @@ namespace GetTokenFunction
             }
 
             log.LogInformation("C# HTTP trigger function processed a request.");
+            log.LogInformation(response.Content.ToString());
 
             if (response.IsSuccessStatusCode)
             {
