@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace GetTokenFunction
 {
-    public static class Function1
+    public static class GetAPIKeyFromStorage
     {
         [FunctionName("GetAPIKeyFromStorage")]
         public static async Task<IActionResult> Run(

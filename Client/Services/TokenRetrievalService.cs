@@ -1,6 +1,6 @@
 ﻿using System.Net.Http.Headers;
 
-namespace spaceapi.Data;
+namespace spaceapi.Services;
 
 public class TokenRetrievalService
 {
@@ -13,18 +13,18 @@ public class TokenRetrievalService
         _configuration = configuration;
     }
 
-    public async Task<string> GetTokenFromFunction()
+    public async Task<string> GetTokenFromFunction(string secretName)
     {
         string token = null;
 
         string functionUrl = _configuration["AzureFunctionUrl"];
-        string endpoint = $"?key=NasaApiKey";
+        string endpoint = $"?key={secretName}";
 
         HttpClient client = new HttpClient();
 
         try
         {
-            client.BaseAddress = new Uri(functionUrl);
+            client.BaseAddress = new Uri(functionUrl + "/GetAPIKeyFromStorage");
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/text"));
         }
 

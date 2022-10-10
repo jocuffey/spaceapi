@@ -3,13 +3,11 @@
 namespace spaceapi.Data;
 
 [Serializable]
-public class SpaceImage
+public class SpaceImage : ApiResponse
 {
     [JsonPropertyName("url")]
     public string? Url { get; set; }
 
     [JsonPropertyName("title")]
     public string? Title { get; set; }
-
-    public string? Error { get; set; }
 }

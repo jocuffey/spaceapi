@@ -1,7 +1,8 @@
 ﻿using System.Net.Http.Headers;
 using System.Text.Json;
+using spaceapi.Data;
 
-namespace spaceapi.Data;
+namespace spaceapi.Services;
 
 public class SpaceImageService
 {
@@ -20,14 +21,16 @@ public class SpaceImageService
     {
         SpaceImage img = new SpaceImage();
 
-        string apiUrl = _configuration["NasaApiEndpoint"];
-        string accessKey = await _tokenRetrievalService.GetTokenFromFunction();
-        string endpoint = $"?api_key={accessKey}";
+        string apiUrl = _configuration["NasaApiUrl"];
+        string endpoint = null;
 
         HttpClient client = new HttpClient();
 
         try
         {
+            string accessKey = await _tokenRetrievalService.GetTokenFromFunction(_configuration["NasaApiKeyName"]);
+            endpoint = $"?api_key={accessKey}";
+
             client.BaseAddress = new Uri(apiUrl);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/text"));
         }

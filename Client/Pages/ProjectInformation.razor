@@ -1,0 +1,36 @@
+﻿@page "/projectinfo"
+
+@using spaceapi.Services
+@using spaceapi.Data
+
+@inject NotionService NotionService
+<PageTitle>Project Infomation</PageTitle>
+
+<p>Display information from Notion here!</p>
+
+@if (users == null)
+{
+    <p><em>Loading...</em></p>
+}
+else{
+    <ul>
+        @foreach (var user in users)
+        {
+            <li>
+                <p>@user.Name</p>
+                <p>@user.Type</p>
+                <img href="@user.Avatar" />
+            </li>
+        }
+    </ul>
+}
+
+
+@code {
+    private List<NotionUser>? users;
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await NotionService.GetAllUsers();
+    }
+}
