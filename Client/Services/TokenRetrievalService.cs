@@ -24,7 +24,7 @@ public class TokenRetrievalService
 
         try
         {
-            client.BaseAddress = new Uri(functionUrl + "/GetAPIKeyFromStorage");
+            client.BaseAddress = new Uri(functionUrl + "/api/GetAPIKeyFromStorage");
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/text"));
         }
 
