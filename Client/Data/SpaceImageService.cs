@@ -7,11 +7,13 @@ public class SpaceImageService
 {
     private readonly ILogger<SpaceImageService> _logger;
     private readonly IConfiguration _configuration;
+    private readonly TokenRetrievalService _tokenRetrievalService;
 
-    public SpaceImageService(ILogger<SpaceImageService> logger, IConfiguration configuration)
+    public SpaceImageService(ILogger<SpaceImageService> logger, IConfiguration configuration, TokenRetrievalService tokenRetrievalService)
     {
         _logger = logger;
         _configuration = configuration;
+        _tokenRetrievalService = tokenRetrievalService;
     }
 
     public async Task<SpaceImage> GetImageOfTheDay()
@@ -19,7 +21,7 @@ public class SpaceImageService
         SpaceImage img = new SpaceImage();
 
         string apiUrl = _configuration["NasaApiEndpoint"];
-        string accessKey = _configuration["NasaApiKey"];
+        string accessKey = await _tokenRetrievalService.GetTokenFromFunction();
         string endpoint = $"?api_key={accessKey}";
 
         HttpClient client = new HttpClient();
@@ -27,7 +29,7 @@ public class SpaceImageService
         try
         {
             client.BaseAddress = new Uri(apiUrl);
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/text"));
         }
 
         catch (Exception ex)

@@ -14,7 +14,7 @@ namespace GetTokenFunction
     {
         [FunctionName("GetAPIKeyFromStorage")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
@@ -29,7 +29,7 @@ namespace GetTokenFunction
 
             string responseMessage = string.IsNullOrEmpty(key)
                 ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-                : $"key is: {key}";
+                : $"{key}";
 
             return new OkObjectResult(responseMessage);
         }
